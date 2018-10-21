@@ -22,6 +22,9 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\GeometryLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\framework\Application.h">
@@ -31,6 +34,12 @@
       <Filter>src\framework</Filter>
     </ClInclude>
     <ClInclude Include="src\vkTracer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GeometryLoader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shared_with_shaders.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

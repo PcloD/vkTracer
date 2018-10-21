@@ -39,6 +39,7 @@ Application::Application()
     : _appName(L"Vk tutorial")
     , _shadersFolder(L"/Assets/Shaders/")
     , _imagesFolder(L"/Assets/Textures/")
+    , _geometryFolder(L"/Assets/Geometries/")
 {
     _applicationInstance = this;
 }

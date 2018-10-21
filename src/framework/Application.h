@@ -147,6 +147,7 @@ protected:
     std::wstring _appName;
     std::wstring _shadersFolder;
     std::wstring _imagesFolder;
+    std::wstring _geometryFolder;
     Settings _settings;
     std::wstring _basePath;
     WindowInfo _windowInfo = { };

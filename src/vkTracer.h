@@ -1,6 +1,23 @@
 #pragma once
 
 #include "framework/RaytracingApplication.h"
+#include "GeometryLoader.h"
+
+#include <vector>
+
+struct RTGeometry {
+    RTGeometry()
+        : as(VK_NULL_HANDLE)
+        , asMemory(VK_NULL_HANDLE)
+    { }
+
+    VkGeometryNVX               vkgeo;
+    VkAccelerationStructureNVX  as;
+    VkDeviceMemory              asMemory;
+    BufferResource              vb;
+    BufferResource              ib;
+    BufferResource              matIDs;
+};
 
 class vkTracer : public RaytracingApplication {
 public:
@@ -17,15 +34,16 @@ public:
     void CreateDescriptorSet();
 
 private:
-    VkDeviceMemory              mTopASMemory;
-    VkDeviceMemory              mBottomASMemory;
-    VkAccelerationStructureNVX  mTopAS;
-    VkAccelerationStructureNVX  mBottomAS;
-    VkDescriptorSetLayout       mRTDescriptorSetLayout;
-    VkPipelineLayout            mRTPipelineLayout;
-    VkPipeline                  mRTPipeline;
-    VkDescriptorPool            mRTDescriptorPool;
-    VkDescriptorSet             mRTDescriptorSet;
+    VkDeviceMemory                          mTopASMemory;
+    VkAccelerationStructureNVX              mTopAS;
+    VkDescriptorSetLayout                   mRTDescriptorSetLayout;
+    VkPipelineLayout                        mRTPipelineLayout;
+    VkPipeline                              mRTPipeline;
+    VkDescriptorPool                        mRTDescriptorPool;
+    VkDescriptorSet                         mRTDescriptorSet;
 
-    BufferResource              mShaderBindingTable;
+    BufferResource                          mShaderBindingTable;
+
+    GeometryLoader                          mGeometryLoader;
+    std::vector<RTGeometry>                 mRTGeometries;
 };
