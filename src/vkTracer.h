@@ -3,6 +3,7 @@
 #include "framework/RaytracingApplication.h"
 #include "GeometryLoader.h"
 
+#include <array>
 #include <vector>
 
 struct RTGeometry {
@@ -29,21 +30,26 @@ public:
     virtual void Cleanup() override;
 
     void CreateAccelerationStructures();
+    void CreateDataBuffers();
+    void CreateDescriptorSetLayouts();
     void CreatePipeline();
     void CreateShaderBindingTable();
-    void CreateDescriptorSet();
+    void CreateDescriptorSets();
+    void UpdateDescriptorSets();
 
 private:
     VkDeviceMemory                          mTopASMemory;
     VkAccelerationStructureNVX              mTopAS;
-    VkDescriptorSetLayout                   mRTDescriptorSetLayout;
     VkPipelineLayout                        mRTPipelineLayout;
     VkPipeline                              mRTPipeline;
     VkDescriptorPool                        mRTDescriptorPool;
-    VkDescriptorSet                         mRTDescriptorSet;
+    std::array<VkDescriptorSetLayout, 2>    mRTDescriptorSetLayouts;
+    std::array<VkDescriptorSet, 2>          mRTDescriptorSets;
 
     BufferResource                          mShaderBindingTable;
 
     GeometryLoader                          mGeometryLoader;
     std::vector<RTGeometry>                 mRTGeometries;
+    BufferResource                          mRTMaterialsBuffer;
+    std::vector<VkBufferView>               mRTFaceMaterialIDBufferViews;
 };
