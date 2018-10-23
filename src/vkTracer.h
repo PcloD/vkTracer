@@ -15,8 +15,11 @@ struct RTGeometry {
     VkGeometryNVX               vkgeo;
     VkAccelerationStructureNVX  as;
     VkDeviceMemory              asMemory;
-    BufferResource              vb;
+    BufferResource              positions;
+    BufferResource              normals;
+    BufferResource              uvs;
     BufferResource              ib;
+    BufferResource              faces;
     BufferResource              matIDs;
 };
 
@@ -30,7 +33,7 @@ public:
     virtual void Cleanup() override;
 
     void CreateAccelerationStructures();
-    void CreateDataBuffers();
+    void CreateSceneShaderData();
     void CreateDescriptorSetLayouts();
     void CreatePipeline();
     void CreateShaderBindingTable();
@@ -43,8 +46,8 @@ private:
     VkPipelineLayout                        mRTPipelineLayout;
     VkPipeline                              mRTPipeline;
     VkDescriptorPool                        mRTDescriptorPool;
-    std::array<VkDescriptorSetLayout, 2>    mRTDescriptorSetLayouts;
-    std::array<VkDescriptorSet, 2>          mRTDescriptorSets;
+    std::array<VkDescriptorSetLayout, 4>    mRTDescriptorSetLayouts;
+    std::array<VkDescriptorSet, 4>          mRTDescriptorSets;
 
     BufferResource                          mShaderBindingTable;
 
@@ -52,4 +55,6 @@ private:
     std::vector<RTGeometry>                 mRTGeometries;
     BufferResource                          mRTMaterialsBuffer;
     std::vector<VkBufferView>               mRTFaceMaterialIDBufferViews;
+    std::vector<VkBufferView>               mRTFacesBufferViews;
+    std::vector<VkBufferView>               mRTNormalsBufferViews;
 };

@@ -42,23 +42,28 @@ bool GeometryLoader::LoadFromOBJ(const std::wstring& fileName) {
             const size_t numFaces = shape.mesh.num_face_vertices.size();
             mesh.faces.resize(numFaces);
             mesh.materialIDs.resize(numFaces);
-            mesh.vertices.resize(numFaces * 3);
+            mesh.positions.resize(numFaces * 3);
+            mesh.normals.resize(numFaces * 3);
+            mesh.uvs.resize(numFaces * 3);
 
             size_t vIdx = 0;
             for (size_t f = 0; f < numFaces; ++f) {
                 assert(shape.mesh.num_face_vertices[f] == 3);
                 for (size_t j = 0; j < 3; ++j, ++vIdx) {
-                    Vertex& vertex = mesh.vertices[vIdx];
                     const tinyobj::index_t& i = shape.mesh.indices[vIdx];
 
-                    vertex.posX = attrib.vertices[3 * i.vertex_index + 0];
-                    vertex.posY = attrib.vertices[3 * i.vertex_index + 1];
-                    vertex.posZ = attrib.vertices[3 * i.vertex_index + 2];
-                    vertex.normalX = attrib.normals[3 * i.normal_index + 0];
-                    vertex.normalY = attrib.normals[3 * i.normal_index + 1];
-                    vertex.normalZ = attrib.normals[3 * i.normal_index + 2];
-                    vertex.u = attrib.texcoords[2 * i.texcoord_index + 0];
-                    vertex.v = attrib.texcoords[2 * i.texcoord_index + 1];
+                    vec3& pos = mesh.positions[vIdx];
+                    vec3& normal = mesh.normals[vIdx];
+                    vec2& uv = mesh.uvs[vIdx];
+
+                    pos.x = attrib.vertices[3 * i.vertex_index + 0];
+                    pos.y = attrib.vertices[3 * i.vertex_index + 1];
+                    pos.z = attrib.vertices[3 * i.vertex_index + 2];
+                    normal.x = attrib.normals[3 * i.normal_index + 0];
+                    normal.y = attrib.normals[3 * i.normal_index + 1];
+                    normal.z = attrib.normals[3 * i.normal_index + 2];
+                    uv.x = attrib.texcoords[2 * i.texcoord_index + 0];
+                    uv.y = attrib.texcoords[2 * i.texcoord_index + 1];
                 }
 
                 Face& face = mesh.faces[f];
@@ -76,15 +81,15 @@ bool GeometryLoader::LoadFromOBJ(const std::wstring& fileName) {
             const tinyobj::material_t& srcMat = materials[i];
             Material_s& dstMat = mMaterials[i];
 
-            dstMat.diffuse[0] = srcMat.diffuse[0];
-            dstMat.diffuse[1] = srcMat.diffuse[1];
-            dstMat.diffuse[2] = srcMat.diffuse[2];
-            dstMat.diffuse[3] = 1.0f;
+            dstMat.diffuse.x = srcMat.diffuse[0];
+            dstMat.diffuse.y = srcMat.diffuse[1];
+            dstMat.diffuse.z = srcMat.diffuse[2];
+            dstMat.diffuse.w = 1.0f;
 
-            dstMat.emission[0] = srcMat.emission[0];
-            dstMat.emission[1] = srcMat.emission[1];
-            dstMat.emission[2] = srcMat.emission[2];
-            dstMat.emission[3] = 1.0f;
+            dstMat.emission.x = srcMat.emission[0];
+            dstMat.emission.y = srcMat.emission[1];
+            dstMat.emission.z = srcMat.emission[2];
+            dstMat.emission.w = 1.0f;
         }
     }
 
@@ -96,11 +101,19 @@ size_t GeometryLoader::GetNumMeshes() const {
 }
 
 size_t GeometryLoader::GetNumVertices(const size_t meshIdx) const {
-    return mMeshes[meshIdx].vertices.size();
+    return mMeshes[meshIdx].positions.size();
 }
 
-const Vertex* GeometryLoader::GetVertices(const size_t meshIdx) const {
-    return mMeshes[meshIdx].vertices.data();
+const vec3* GeometryLoader::GetPositions(const size_t meshIdx) const {
+    return mMeshes[meshIdx].positions.data();
+}
+
+const vec3* GeometryLoader::GetNormals(const size_t meshIdx) const {
+    return mMeshes[meshIdx].normals.data();
+}
+
+const vec2* GeometryLoader::GetUVs(const size_t meshIdx) const {
+    return mMeshes[meshIdx].uvs.data();
 }
 
 size_t GeometryLoader::GetNumFaces(const size_t meshIdx) const {

@@ -4,22 +4,19 @@
 
 #include "shared_with_shaders.h"
 
-struct Vertex {
-    float posX, posY, posZ;
-    float normalX, normalY, normalZ;
-    float u, v;
-};
-
 struct Face {
     uint32_t a, b, c;
 };
 
 struct Mesh {
-    using VerticesArray = std::vector<Vertex>;
+    using Vec3Array = std::vector<vec3>;
+    using Vec2Array = std::vector<vec2>;
     using FacesArray = std::vector<Face>;
     using FaceMaterialIDs = std::vector<uint32_t>;
 
-    VerticesArray   vertices;
+    Vec3Array       positions;
+    Vec3Array       normals;
+    Vec2Array       uvs;
     FacesArray      faces;
     FaceMaterialIDs materialIDs;
 };
@@ -34,7 +31,9 @@ public:
     size_t              GetNumMeshes() const;
 
     size_t              GetNumVertices(const size_t meshIdx) const;
-    const Vertex*       GetVertices(const size_t meshIdx) const;
+    const vec3*         GetPositions(const size_t meshIdx) const;
+    const vec3*         GetNormals(const size_t meshIdx) const;
+    const vec2*         GetUVs(const size_t meshIdx) const;
 
     size_t              GetNumFaces(const size_t meshIdx) const;
     const Face*         GetFaces(const size_t meshIdx) const;
