@@ -32,6 +32,7 @@ public:
     virtual void RecordCommandBufferForFrame(VkCommandBuffer commandBuffer, uint32_t frameIndex) override;
     virtual void Cleanup() override;
 
+    void LoadIBLTexture();
     void CreateAccelerationStructures();
     void CreateSceneShaderData();
     void CreateDescriptorSetLayouts();
@@ -57,4 +58,6 @@ private:
     std::vector<VkBufferView>               mRTFaceMaterialIDBufferViews;
     std::vector<VkBufferView>               mRTFacesBufferViews;
     std::vector<VkBufferView>               mRTNormalsBufferViews;
+
+    ImageResource                           mIBLTexture;
 };

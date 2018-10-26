@@ -77,6 +77,7 @@ private:
     static std::wstring _folderPath;
 
 public:
+    VkFormat Format;
     VkImage Image = VK_NULL_HANDLE;
     VkDeviceMemory Memory = VK_NULL_HANDLE;
     VkImageView ImageView = VK_NULL_HANDLE;

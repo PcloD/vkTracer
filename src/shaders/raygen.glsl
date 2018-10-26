@@ -4,10 +4,10 @@
 
 #include "../shared_with_shaders.h"
 
-layout(set = 0, binding = 0) uniform accelerationStructureNVX SceneAS;
-layout(set = 0, binding = 1, rgba8) uniform image2D OutputImage;
+layout(set = SWS_SCENE_AS_SET,  binding = SWS_SCENE_AS_BINDING)         uniform accelerationStructureNVX SceneAS;
+layout(set = SWS_OUT_IMAGE_SET, binding = SWS_OUT_IMAGE_BINDING, rgba8) uniform image2D OutputImage;
 
-layout(location = 0) rayPayloadNVX RayPayload_s RayPayload;
+layout(location = SWS_LOC_PRIMARY_RAY) rayPayloadNVX RayPayload_s RayPayload;
 
 void main() {
     const vec2 curPixel = vec2(gl_LaunchIDNVX.xy);
@@ -18,12 +18,12 @@ void main() {
     const float aspect = float(gl_LaunchSizeNVX.y) / float(gl_LaunchSizeNVX.x);
 
     const vec3 origin = vec3(0.0f, 1.0f, 2.35f);
-    const vec3 direction = vec3(uv.x, -uv.y * aspect, -1.0f);
+    const vec3 direction = normalize(vec3(uv.x, -uv.y * aspect, -1.0f));
 
     const uint rayFlags = gl_RayFlagsOpaqueNVX;
     const uint cullMask = 0xff;
-    const float tmin = 0.001f;
-    const float tmax = 10.0f;
+    const float tmin = SWS_EPSILON;
+    const float tmax = 100.0f;
 
     traceNVX(SceneAS,
              rayFlags,
@@ -35,7 +35,9 @@ void main() {
              tmin,
              direction,
              tmax,
-             0 /*payload*/);
+             SWS_LOC_PRIMARY_RAY);
 
-    imageStore(OutputImage, ivec2(gl_LaunchIDNVX.xy), RayPayload.color);
+    vec3 outColor = pow(RayPayload.colorAndDist.rgb, vec3(1.0f / 2.2f));
+
+    imageStore(OutputImage, ivec2(gl_LaunchIDNVX.xy), vec4(outColor, 1.0f));
 }

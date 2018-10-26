@@ -887,6 +887,8 @@ void ImageResource::SetFolderPath(const std::wstring& folderPath)
 VkResult ImageResource::CreateImage(VkImageType imageType, VkFormat format, VkExtent3D extent, VkImageTiling tiling,
     VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties)
 {
+    Format = format;
+
     VkImageCreateInfo imageCreateInfo;
     imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     imageCreateInfo.pNext = nullptr;
@@ -953,17 +955,29 @@ bool ImageResource::LoadTexture2DFromFile(const std::wstring& fileName, VkResult
         return false;
     }
 
+    const std::wstring extension = fileName.substr(fileName.length() - 3);
+
     int32_t textureWidth;
     int32_t textureHeight;
     int32_t textureChannels;
-    stbi_uc* pixelData = stbi_load_from_file(file, &textureWidth, &textureHeight, &textureChannels, STBI_rgb_alpha);
+    bool textureHDR = false;
+    stbi_uc* pixelData = nullptr;
+
+    if (extension == L"hdr") {
+        textureHDR = true;
+        pixelData = reinterpret_cast<stbi_uc*>(stbi_loadf_from_file(file, &textureWidth, &textureHeight, &textureChannels, STBI_rgb_alpha));
+    } else {
+        pixelData = stbi_load_from_file(file, &textureWidth, &textureHeight, &textureChannels, STBI_rgb_alpha);
+    }
+
     if (!pixelData)
     {
         stbi_image_free(pixelData);
         return false;
     }
 
-    VkDeviceSize imageSize = textureWidth * textureHeight * 4;
+    const int32_t bpp = textureHDR ? sizeof(float[4]) : sizeof(uint8_t[4]);
+    VkDeviceSize imageSize = textureWidth * textureHeight * bpp;
     BufferResource stagingBuffer;
     code = stagingBuffer.Create(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
     if (code != VK_SUCCESS)
@@ -981,7 +995,8 @@ bool ImageResource::LoadTexture2DFromFile(const std::wstring& fileName, VkResult
     stbi_image_free(pixelData);
 
     VkExtent3D imageExtent { (uint32_t)textureWidth, (uint32_t)textureHeight, 1 };
-    code = CreateImage(VK_IMAGE_TYPE_2D, VK_FORMAT_R8G8B8A8_SRGB, imageExtent, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+    Format = textureHDR ? VK_FORMAT_R32G32B32A32_SFLOAT : VK_FORMAT_R8G8B8A8_SRGB;
+    code = CreateImage(VK_IMAGE_TYPE_2D, Format, imageExtent, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
     if (code != VK_SUCCESS)
     {
         return false;
