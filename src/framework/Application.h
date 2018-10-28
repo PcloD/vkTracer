@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <cassert>
 
 #define NOMINMAX
 #include <Windows.h>
@@ -254,6 +255,7 @@ void RunApplication()
     { \
         if (code != VK_SUCCESS) \
         { \
+            assert(false); \
             ExitError(message + std::wstring(L" ErrorCode: ") + ToString(code)); \
         } \
     }

@@ -25,6 +25,9 @@
     <ClCompile Include="src\GeometryLoader.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\framework\Application.h">
@@ -40,6 +43,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\shared_with_shaders.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mymath.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

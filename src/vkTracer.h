@@ -2,6 +2,7 @@
 
 #include "framework/RaytracingApplication.h"
 #include "GeometryLoader.h"
+#include "Camera.h"
 
 #include <array>
 #include <vector>
@@ -30,8 +31,12 @@ public:
 
     virtual void Init() override;
     virtual void RecordCommandBufferForFrame(VkCommandBuffer commandBuffer, uint32_t frameIndex) override;
+    virtual void UpdateDataForFrame(uint32_t frameIndex);
     virtual void Cleanup() override;
 
+private:
+    void CreateCamera();
+    void UpdateCamera(const float dt);
     void LoadIBLTexture();
     void CreateAccelerationStructures();
     void CreateSceneShaderData();
@@ -59,5 +64,10 @@ private:
     std::vector<VkBufferView>               mRTFacesBufferViews;
     std::vector<VkBufferView>               mRTNormalsBufferViews;
 
+    BufferResource                          mCamDataBuffer;
     ImageResource                           mIBLTexture;
+
+    // camera a& user interaction
+    Camera                                  mCamera;
+    vec2                                    mCursorPos;
 };

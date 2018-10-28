@@ -11,7 +11,6 @@ layout(set = SWS_IBL_SET, binding = SWS_IBL_BINDING) uniform sampler2D IBLTextur
 void main() {
     const vec3 dir = normalize(gl_WorldRayDirectionNVX);
     vec2 uv = CartesianToLatLong(dir);
-    uv.y = 1.0f - uv.y;
 
     const vec3 iblColor = texture(IBLTexture, uv).rgb;
 

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\framework\Application.cpp" />
     <ClCompile Include="src\framework\RaytracingApplication.cpp" />
     <ClCompile Include="src\GeometryLoader.cpp" />
@@ -18,9 +19,11 @@
     <ClCompile Include="src\vkTracer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\framework\Application.h" />
     <ClInclude Include="src\framework\RaytracingApplication.h" />
     <ClInclude Include="src\GeometryLoader.h" />
+    <ClInclude Include="src\mymath.h" />
     <ClInclude Include="src\shared_with_shaders.h" />
     <ClInclude Include="src\vkTracer.h" />
   </ItemGroup>
@@ -76,7 +79,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)_3rdparty\vulkan\Include;$(SolutionDir)_3rdparty\stb\include;$(SolutionDir)_3rdparty\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)_3rdparty\vulkan\Include;$(SolutionDir)_3rdparty\stb\include;$(SolutionDir)_3rdparty\tinyobjloader;$(SolutionDir)_3rdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -97,7 +100,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)_3rdparty\vulkan\Include;$(SolutionDir)_3rdparty\stb\include;$(SolutionDir)_3rdparty\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)_3rdparty\vulkan\Include;$(SolutionDir)_3rdparty\stb\include;$(SolutionDir)_3rdparty\tinyobjloader;$(SolutionDir)_3rdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

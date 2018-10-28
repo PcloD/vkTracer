@@ -7,5 +7,9 @@
 layout(location = SWS_LOC_SECONDARY_RAY) rayPayloadInNVX RayPayload_s RayPayloadSecondary;
 
 void main() {
-    RayPayloadSecondary.colorAndDist = vec4(gl_RayTmaxNVX);
+    RayPayloadSecondary.colorAndDist = vec4(gl_HitTNVX);
+
+#ifdef SHADER_ANY_HIT_VARIATION
+    terminateRayNVX();
+#endif
 }
